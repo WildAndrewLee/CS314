@@ -15,21 +15,23 @@
 ;; HELPER FUNCTIONS
 
 ;; *** CODE FOR ANY HELPER FUNCTION GOES HERE ***
-(define key_helper
-  (lambda (key w)
-	(if
-		(null? w)
-		key
-		(key_helper (+ (* 31 key) (ctv (car w))) (cdr w)))))
+
+(define modulus
+  (lambda (key size)
+    (if
+      (>= key size)
+      (modulus (- key size) size)
+      key)))
 
 ;; -----------------------------------------------------
 ;; KEY FUNCTION
 
 (define key
   (lambda (w)
-	(key_helper 5387 w)))
-
-(key '(h e l l o))
+    (if
+      (null? w)
+      5387
+      (+ (* 31 (key (cdr w))) (ctv (car w))))))
 
 ;; -----------------------------------------------------
 ;; EXAMPLE KEY VALUES
@@ -43,8 +45,8 @@
 ;; value of parameter "size" should be a prime number
 (define gen-hash-division-method
   (lambda (size) ;; range of values: 0..size-1
-     'SOME_CODE_GOES_HERE ;; *** FUNCTION BODY IS MISSING ***
-))
+    (lambda (k)
+      (remainder (key k) size))))
 
 ;; value of parameter "size" is not critical
 ;; Note: hash functions may return integer values in "real"
@@ -52,8 +54,8 @@
 
 (define gen-hash-multiplication-method
   (lambda (size) ;; range of values: 0..size-1
-     'SOME_CODE_GOES_HERE ;; *** FUNCTION BODY IS MISSING ***
-))
+    (lambda (k)
+      (floor (* (remainder (* (key k) A) 1) size)))))
 
 
 ;; -----------------------------------------------------

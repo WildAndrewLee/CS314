@@ -23,14 +23,35 @@
   (lambda (w)
     (reduce
       (lambda (a b)
-        (+ (* 31 b) a)
-        )
+        (+ (* 31 b) a))
       (map ctv w)
       5387)))
-    ;; (if
-    ;;  (null? w)
-    ;;  5387
-    ;;  (+ (* 31 (key (cdr w))) (ctv (car w))))))
+
+(define set_true
+  (lambda (indices vector)
+    (if
+      (null? indices)
+      vector
+      (let
+        ((temp (array-set! vector 1 (car indicies))))
+        (set_true (cdr indices) vector)))))
+
+(define hash_keys
+  (lambda (fn_list w)
+    (if
+      (null? fn_list)
+      '()
+      (append ((car fn_list) w) (hash_keys (cdr fn_list))))))
+
+(define gen_vector
+  (lambda (max_size fn_list dict)
+    (if
+      (null? dict)
+      (make-array 0 max_size)
+      (letrec
+        ((keys (hash_keys fn_list (car dict)))
+        (vector (gen_vector (max keys) fn_list (cdr dict)))
+        (set_true keys vector))))))
 
 ;; -----------------------------------------------------
 ;; EXAMPLE KEY VALUES
@@ -96,9 +117,7 @@
 
 (define gen-checker
   (lambda (hashfunctionlist dict)
-     'SOME_CODE_GOES_HERE ;; *** FUNCTION BODY IS MISSING ***
-))
-
+      ))
 
 ;; -----------------------------------------------------
 ;; EXAMPLE SPELL CHECKERS

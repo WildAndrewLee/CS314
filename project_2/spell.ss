@@ -15,15 +15,21 @@
 ;; HELPER FUNCTIONS
 
 ;; *** CODE FOR ANY HELPER FUNCTION GOES HERE ***
-
+(define key_helper
+  (lambda (key w)
+	(if
+		(null? w)
+		key
+		(key_helper (+ (* 31 key) (ctv (car w))) (cdr w)))))
 
 ;; -----------------------------------------------------
 ;; KEY FUNCTION
 
 (define key
   (lambda (w)
-     'SOME_CODE_GOES_HERE ;; *** FUNCTION BODY IS MISSING ***
-))
+	(key_helper 5387 w)))
+
+(key '(h e l l o))
 
 ;; -----------------------------------------------------
 ;; EXAMPLE KEY VALUES

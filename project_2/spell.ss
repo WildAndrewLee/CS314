@@ -16,22 +16,21 @@
 
 ;; *** CODE FOR ANY HELPER FUNCTION GOES HERE ***
 
-(define modulus
-  (lambda (key size)
-    (if
-      (>= key size)
-      (modulus (- key size) size)
-      key)))
-
 ;; -----------------------------------------------------
 ;; KEY FUNCTION
 
 (define key
   (lambda (w)
-    (if
-      (null? w)
-      5387
-      (+ (* 31 (key (cdr w))) (ctv (car w))))))
+    (reduce
+      (lambda (a b)
+        (+ (* 31 b) a)
+        )
+      (map ctv w)
+      5387)))
+    ;; (if
+    ;;  (null? w)
+    ;;  5387
+    ;;  (+ (* 31 (key (cdr w))) (ctv (car w))))))
 
 ;; -----------------------------------------------------
 ;; EXAMPLE KEY VALUES

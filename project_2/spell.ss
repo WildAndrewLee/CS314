@@ -28,13 +28,13 @@
       5387)))
 
 (define set_true
-  (lambda (indices vector)
+  (lambda (indices v)
     (if
       (null? indices)
-      vector
+      v
       (let
-        ((temp (array-set! vector 1 (car indicies))))
-        (set_true (cdr indices) vector)))))
+        ((temp (array-set! v 1 (car indicies))))
+        (set_true (cdr indices) v)))))
 
 (define hash_keys
   (lambda (fn_list w)
@@ -43,6 +43,10 @@
       '()
       (append ((car fn_list) w) (hash_keys (cdr fn_list))))))
 
+(define all_match
+  (lambda (indices v)
+    ;; finish this!!
+
 (define gen_vector
   (lambda (max_size fn_list dict)
     (if
@@ -50,8 +54,8 @@
       (make-array 0 max_size)
       (letrec
         ((keys (hash_keys fn_list (car dict)))
-        (vector (gen_vector (max keys) fn_list (cdr dict)))
-        (set_true keys vector))))))
+        (v (gen_vector (max keys) fn_list (cdr dict)))
+        (set_true keys v))))))
 
 ;; -----------------------------------------------------
 ;; EXAMPLE KEY VALUES
@@ -117,7 +121,14 @@
 
 (define gen-checker
   (lambda (hashfunctionlist dict)
-      ))
+    (let
+      ((v (gen_vector 0 hashfunctionlist dict)))
+      (lambda (w)
+        (if
+          (all_match (hash_keys w) v)
+          #t
+          #f
+        )))))
 
 ;; -----------------------------------------------------
 ;; EXAMPLE SPELL CHECKERS

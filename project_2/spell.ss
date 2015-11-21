@@ -16,17 +16,6 @@
 
 ;; *** CODE FOR ANY HELPER FUNCTION GOES HERE ***
 
-;; -----------------------------------------------------
-;; KEY FUNCTION
-
-(define key
-  (lambda (w)
-    (reduce
-      (lambda (a b)
-        (+ (* 31 b) a))
-      (map ctv w)
-      5387)))
-
 (define set_true
   (lambda (indices v)
     (if
@@ -56,6 +45,17 @@
         ((keys (hash_keys fn_list (car dict)))
         (v (gen_vector (max keys) fn_list (cdr dict)))
         (set_true keys v))))))
+
+;; -----------------------------------------------------
+;; KEY FUNCTION
+
+(define key
+  (lambda (w)
+    (reduce
+      (lambda (a b)
+        (+ (* 31 b) a))
+      (map ctv w)
+      5387)))
 
 ;; -----------------------------------------------------
 ;; EXAMPLE KEY VALUES

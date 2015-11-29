@@ -1,40 +1,57 @@
+
 ; *********************************************
 ; *  314 Principles of Programming Languages  *
 ; *  Fall 2015                                *
 ; *  Student Version                          *
 ; *********************************************
 
+;; contains "ctv", "A", and "reduce" definitions
+(load "include.ss")
+
+;; contains simple dictionary definition
+(load "test-dictionary.ss")
+
 ;; -----------------------------------------------------
 ;; HELPER FUNCTIONS
 
 ;; *** CODE FOR ANY HELPER FUNCTION GOES HERE ***
+
+(define set_true
+  (lambda (indices v)
+    (if
+      (null? indices)
+      v
+      (let
+        ((temp (array-set! v 1 (car indices))))
+        (set_true (cdr indices) v)))))
 
 (define hash_keys
   (lambda (fn_list w)
     (if
       (null? fn_list)
       '()
-      (append (list ((car fn_list) w)) (hash_keys (cdr fn_list) w)))))
+      (append ((car fn_list) w) (hash_keys (cdr fn_list) w)))))
 
 (define all_match
   (lambda (indices v)
-    (if
-     (null? v)
-     #f
 	(if
 	  (null? indices)
 	  #t
 	  (if
-           (= (car indices) (car v))
-           (all_match (cdr indices) (cdr v))
-           (all_match indices (cdr v)))))))
+		(array-ref v (car indices))
+		(all_match (cdr indices) v)
+		#f))))
 
-(define gen_indices
-  (lambda (fn_list dict)
+(define gen_vector
+  (lambda (max_size fn_list dict)
     (if
-     (null? dict)
-     '()
-     (append (hash_keys fn_list (car dict)) (gen_indices fn_list (cdr dict))))))
+      (null? dict)
+      (make-array 0 max_size)
+	  (let
+		((keys (hash_keys fn_list (car dict))))
+		(let
+		  ((v (gen_vector (max keys) fn_list (cdr dict))))
+		  (set_true keys v))))))
 
 ;; -----------------------------------------------------
 ;; KEY FUNCTION
@@ -113,10 +130,10 @@
 (define gen-checker
   (lambda (hashfunctionlist dict)
     (let
-      ((indices (gen_indices hashfunctionlist dict)))
+      ((v (gen_vector 0 hashfunctionlist dict)))
       (lambda (w)
         (if
-          (all_match (sort (hash_keys hashfunctionlist w) <) (sort indices <))
+          (all_match (hash_keys hashfunctionlist w) v)
           #t
           #f
         )))))

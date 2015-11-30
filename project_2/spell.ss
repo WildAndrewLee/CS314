@@ -19,11 +19,11 @@
 (define all_match
   (lambda (indices v)
     (if
-     (null? v)
-     #f
+     (null? indices)
+     #t
 	(if
-	  (null? indices)
-	  #t
+	  (null? v)
+	  #f
 	  (if
            (= (car indices) (car v))
            (all_match (cdr indices) (cdr v))
